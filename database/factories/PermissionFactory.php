@@ -20,8 +20,8 @@ class PermissionFactory extends Factory
         return [
             'reason' => fake()->paragraph(),
             'status' => fake()->randomElement($status),
-            'start_date' => fake()->date('Y-m-d H:i:s'),
-            'end_date' => fake()->date('Y-m-d H:i:s'),
+            'start_date' => fake()->date('Y-m-d'),
+            'end_date' => fake()->date('Y-m-d '),
         ];
     }
 }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0cefc8f8c8f7320e732db22110e017ed",
+    "content-hash": "b0e16f93e9a06c5aaeafaf3bcc710a18",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -3305,6 +3305,54 @@
                 }
             ],
             "time": "2024-12-05T17:15:07+00:00"
+        },
+        {
+            "name": "monzer/filament-email-verification-alert",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/monzer15/filament-email-verification-alert.git",
+                "reference": "7b2850661978045abb4d8ec84c92677965687abe"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/monzer15/filament-email-verification-alert/zipball/7b2850661978045abb4d8ec84c92677965687abe",
+                "reference": "7b2850661978045abb4d8ec84c92677965687abe",
+                "shasum": ""
+            },
+            "require": {
+                "filament/support": "^3.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Monzer\\FilamentEmailVerificationAlert\\EmailVerificationAlertServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Monzer\\FilamentEmailVerificationAlert\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Monzer Osman",
+                    "email": "monzerosman15@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Send Email verifications on the fly!",
+            "support": {
+                "issues": "https://github.com/monzer15/filament-email-verification-alert/issues",
+                "source": "https://github.com/monzer15/filament-email-verification-alert/tree/v1.0.0"
+            },
+            "time": "2025-02-12T16:15:24+00:00"
         },
         {
             "name": "nesbot/carbon",

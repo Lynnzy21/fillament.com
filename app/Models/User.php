@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -11,6 +12,8 @@ use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
+
+    
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
@@ -37,7 +40,7 @@ class User extends Authenticatable
         'graduate_date',
         'status_graduate',
         'kelas_santri_id',
-        'departemen_id',
+        'deparemen_id',
         'program_stage_id',
         'password',
         'role',
@@ -97,18 +100,18 @@ class User extends Authenticatable
     }
 
     public function leader_of(){
-        return $this->hasMany(Departemen::class,'leader_id');
+        return $this->hasMany(Departmen::class,'leader_id');
     }
     public function co_leader_of(){
-        return $this->hasMany(Departemen::class,'co_leader_id');
+        return $this->hasMany(Departmen::class,'co_leader_id');
     }
 
-     public function kelas(){
+     public function kelas_santri(){
          return $this->belongsTo(KelasSantri::class,'kelas_santri_id');
      }
  
-     public function department(){
-         return $this->belongsTo(Departemen::class,'department_id');
+     public function departmen(){
+         return $this->belongsTo(Departmen::class,'departmen_id');
      }
  
      public function program_stage(){

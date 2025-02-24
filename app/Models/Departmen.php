@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Departemen extends Model
+class Departmen extends Model
 {
     /** @use HasFactory<\Database\Factories\DepartemenFactory> */
     use HasFactory;
@@ -17,7 +17,7 @@ class Departemen extends Model
     ];
 
     public function members(){
-        return $this->hasMany(User::class,'department_id');
+        return $this->hasMany(User::class,'departmen_id');
     }
 
     public function leader(){

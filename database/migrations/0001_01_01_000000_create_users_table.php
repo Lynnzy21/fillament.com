@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('role')->nullable();
             $table->integer('generation')->nullable();
             $table->string('phone', 20)->nullable();
-            $table->string('entry_date')->nullable();
-            $table->string('graduate_date')->nullable();
+            $table->date('entry_date')->nullable();
+            $table->date('graduate_date')->nullable();
             $table->string('status_graduate')->nullable();
             $table->string('nisn')->nullable();
             $table->string('no_ktp')->nullable();
@@ -30,7 +30,7 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->unsignedBigInteger('kelas_santri_id')->nullable();
-            $table->unsignedBigInteger('departemen_id')->nullable();
+            $table->unsignedBigInteger('departmen_id')->nullable();
             $table->unsignedBigInteger('program_stage_id')->nullable();
             // $table->foreignId('kelas_santri_id')->constrained('classes')->onDelete('cascade');
             // $table->foreignId('department_id')->constrained('departments')->onDelete('cascade');
