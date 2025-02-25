@@ -14,6 +14,8 @@ class DepartmenIdSelect extends Select
       ->label('Amanah Department')
       ->prefixIcon('heroicon-o-building-library')
       ->prefixIconColor('primary')
+      ->searchable()
+      ->native(false)
       ->options(fn() => Departmen::all()->pluck('name', 'id'))
       ->required();
   }

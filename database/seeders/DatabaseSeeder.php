@@ -26,19 +26,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $dataUser = User::factory(10)->create();
-        $dataSantriFamily = SantriFamily::factory(10)->create();
-        $dataKelasSantri = KelasSantri::factory(10)->create();
-       $dataDepartmen = Departmen::factory(10)->create();
-        $dataLessons = Lessons::factory(10)->create();
-        $dataAssessment = Assessment::factory(10)->create();
-        $datapermission = permission::factory(10)->create();
-        $dataAttendance = Attendance::factory(10)->create();
-        $dataRapotsantri = Rapotsantri::factory(10)->create();
-        $dataAttachment = Attachment::factory(10)->create();
-        $dataActivitie = Activitie::factory(10)->create();
-        $dataProgramStage = ProgramStage::factory(10)->create();
-        $dataAttachmentSantri = AttachmentSantri::factory(10)->create();
+        $dataUser = User::factory(50)->create();
+        $dataSantriFamily = SantriFamily::factory(50)->create();
+        $dataKelasSantri = KelasSantri::factory(50)->create();
+       $dataDepartmen = Departmen::factory(50)->create();
+        $dataLessons = Lessons::factory(50)->create();
+        $dataAssessment = Assessment::factory(50)->create();
+        $datapermission = permission::factory(50)->create();
+        $dataAttendance = Attendance::factory(50)->create();
+        $dataRapotsantri = Rapotsantri::factory(50)->create();
+        $dataAttachment = Attachment::factory(50)->create();
+        $dataActivitie = Activitie::factory(50)->create();
+        $dataProgramStage = ProgramStage::factory(50)->create();
+        $dataAttachmentSantri = AttachmentSantri::factory(50)->create();
 
         foreach ($dataUser as $data) {
             $data->update([

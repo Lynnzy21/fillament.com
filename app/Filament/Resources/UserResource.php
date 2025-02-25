@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use DateTime;
 use Filament\Forms\Components\DatePicker;
+use Filament\Support\Enums\IconPosition;
 use Filament\Tables\Grouping\Group;
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
@@ -13,6 +14,7 @@ use App\Forms\Components\KelasSantriIdSelect;
 use App\Models\KelasSantri;
 use App\Models\User;
 use Filament\Forms;
+use Filament\Infolists\Components\Tabs;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\TextInput;
@@ -24,12 +26,14 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\ToggleButtons;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Infolists\Infolist;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Filament\Forms\Components\Wizard;
 use Filament\Forms\Components\Section;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Infolists\Components\TextEntry;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class UserResource extends Resource
@@ -74,7 +78,7 @@ class UserResource extends Resource
 
                                         ->colors([
                                             'male' => 'primary',
-                                            'female' => 'primary',
+                                            'female' => 'warning',
                                         ]),
                                     TextInput::make('name')
                                         ->placeholder('Enter your Name')
@@ -101,8 +105,6 @@ class UserResource extends Resource
                                         ->prefixIcon('heroicon-o-phone')
                                         ->prefixIconColor('primary'),
                                 ]),
-
-
 
                                 Grid::make([
                                     'md' => 1,
@@ -300,8 +302,6 @@ class UserResource extends Resource
                 ->skippable()
                 ->columnSpanFull()
                 ->contained(false),
-
-
         ]);
     }
 
@@ -309,71 +309,27 @@ class UserResource extends Resource
     {
         return $table
         ->poll('5s')
-            ->columns([
-                TextColumn::make('name')
-                    ->searchable()
-                    ->sortable()
-                    ->icon('heroicon-o-user')
-                    ->iconColor('primary')
-                    ->description(fn(User $record): string => "" . $record->email)
-                    ->sortable(query: function (Builder $query, string $direction): Builder {
-                        return $query->orderBy('name', $direction);
-                    }),
-            
-                TextColumn::make('phone'),
-
-                TextColumn::make('role')
+        ->columns([
+            TextColumn::make('name')
+                ->searchable()
+                ->icon('heroicon-o-user')
+                ->iconColor('primary')
+                ->description(fn(User $record): string => "" . $record->email)
+                ->sortable(query: function (Builder $query, string $direction): Builder {
+                    return $query->orderBy('email', $direction);
+                }),
+            TextColumn::make('role')
                 ->badge()
-                ->color(function($record){
-                    $role =  $record->role;
-                    if($role == 'admin'){
+                ->color(function ($record) {
+                    $role = $record->role;
+                    if ($role == 'admin') {
                         return 'success';
-                    }else{
-                        return 'danger';
+                    } else {
+                        return 'warning';
                     }
                 })
                 ->searchable(),
-
-                TextColumn::make('entry_date')
-                ->sortable()
-                ->tooltip(function ($record) {
-                    return $record->entry_date . ' -> ' . $record->graduate;
-                })
-                ->getStateUsing(function ($record) {
-                    $tanggalMasuk = new DateTime ($record->entry_date);
-                    $tanggalKeluar = new DateTime ($record->graduate_date);
-
-                    $totalBulan = 
-                    $tanggalMasuk->diff($tanggalKeluar)->m+
-                    ($tanggalKeluar->format('y') - $tanggalMasuk->format('y')) *12;
-
-                    $tahun = floor($totalBulan / 12);
-                    $sisaBulan = $totalBulan % 12;
-                    
-                    if($tahun > 0) {
-                        if($sisaBulan > 0) {
-                            return $tahun . 'Tahun' . $sisaBulan . 'Bulan';
-                        }
-                        return $tahun . 'Tahun';
-                    }
-                    return $sisaBulan . 'Bulan';
-                })
-                ->label('Masa Santri')
-                ->icon('heroicon-o-calendar-date-range')
-                ->iconColor('primary')
-                ->description(fn(User $record): string => "Angkatan" . $record->generation)
-                ->sortable(query: function (Builder $query, string $direction ): Builder {
-                    return $query->orderBy('generation', $direction);
-                }),
-                TextColumn::make('created_at')
-                ->date('y-m-d')
-                ->sortable()
-                ->label('Created At')
-                ->toggleable(isToggledHiddenByDefault: true),
-
-                TextColumn::make('status_graduate'),
-
-                TextColumn::make('departmen.name')
+            TextColumn::make('departmen.name')
                 ->label('Amanah Departement')
                 ->icon('heroicon-o-briefcase')
                 ->iconColor('primary')
@@ -386,46 +342,98 @@ class UserResource extends Resource
                         return $query;
                     }
                 ),
-
-
-                TextColumn::make('kelas_santri.major')
-                ->icon('heroicon-o-academic-cap')
+            TextColumn::make('kelas_santri.major')
                 ->iconColor('primary')
+                ->icon('heroicon-o-academic-cap')
                 ->searchable(
-                    query: function (Builder $query,  string  $search): Builder {
+                    query: function (Builder $query, string $search): Builder {
                         $id = KelasSantri::where('major', 'like', '%' . $search . '%')->first()->id ?? null;
-                        if($id){
+                        if ($id) {
                             return $query->where('kelas_santri_id', 'like', '%' . $id . '%');
                         }
                         return $query;
                     }
                 ),
+
+            TextColumn::make('entry_date')
+                ->sortable()
+                ->tooltip(function ($record) {
+                    return $record->entry_date . ' -> ' . $record->graduate_date;
+                })
+                ->getStateUsing(function ($record) {
+                    $tanggalMasuk = new DateTime($record->entry_date);
+                    $tanggalKeluar = new DateTime($record->graduate_date);
+
+                    $totalBulan =
+                        $tanggalMasuk->diff($tanggalKeluar)->m +
+                        ($tanggalKeluar->format('Y') - $tanggalMasuk->format('Y')) * 12;
+
+                    $tahun = floor($totalBulan / 12);
+                    $sisaBulan = $totalBulan % 12;
+
+                    if ($tahun > 0) {
+                        if ($sisaBulan > 0) {
+                            return $tahun . ' Tahun ' . $sisaBulan . ' Bulan';
+                        }
+                        return $tahun . ' Tahun';
+                    }
+
+                    return $totalBulan . ' Bulan';
+                })
+
+                ->label('Masa Santri')
+                ->icon('heroicon-o-calendar-date-range')
+                ->iconColor('primary')
+                ->description(fn(User $record): string => "Angkatan " . $record->generation)
+                ->sortable(query: function (Builder $query, string $direction): Builder {
+                    return $query->orderBy('generation', $direction);
+                }),
+
+                TextColumn::make('status_graduate')
+                ->searchable()
+                ->label('Status Kelulusan')
+                ->icon('heroicon-o-academic-cap')
+                ->badge(),
+
+            TextColumn::make('created_at')
+                ->date('Y-m-d')
+                ->sortable()
+                ->label('Created At')
+                ->toggleable(isToggledHiddenByDefault: true),
             ])
 
             ->defaultSort(
-                fn($query) => 
+                fn($query) =>
                 $query->orderBy('entry_date', 'desc')
             )
-            ->paginated([
-                10,20,50
-            ])
 
+            ->paginated([
+                5,
+                20,
+                40,
+                80,
+                100,
+            ])
             ->filters([
                 SelectFilter::make('role')
-                ->label('role')
-                ->options([
-                    'admin' => 'Admin',
-                    'user' => 'User',
-                ]),
-
+                    ->label("Role")
+                    ->options([
+                        'ADMIN' => 'ADMIN',
+                        'SANTRI' => 'SANTRI',
+                        'MENTOR' => 'MENTOR',
+                        'LEADER' => 'LEADER',
+                        'USTADZ' => 'USTADZ',
+                    ]),
                 SelectFilter::make('departmen_id')
-                ->label("Departemen")
-                ->searchable()
-                ->preload()
-                ->multiple()
-                ->options(Departmen::all()->pluck('name', 'id')),
+                    ->label("Department")
+                    ->searchable()
+                    ->preload()
+                    ->multiple()
+                    ->options(Departmen::all()->pluck('name', 'id')),
 
-                
+                // TernaryFilter::make('email_verified_at')
+                //         ->nullable(),
+
                 Filter::make('entry_and_graduate_date')
                     ->form([
                         DatePicker::make('entry_from')
@@ -462,24 +470,24 @@ class UserResource extends Resource
                     })
             ])
 
+
             ->groups([
                 Group::make('entry_date')
                     ->label('Masa Santri')
                     ->date()
                     ->collapsible(),
-                Group::make('departmen.name')
+                Group::make('department.name')
                     ->label('Department')
                     ->collapsible(),
 
             ])
 
             ->actions([
-                        Tables\Actions\ActionGroup::make([
-                            Tables\Actions\EditAction::make()->tooltip('Edit'),
-                            Tables\Actions\DeleteAction::make()->tooltip('Delete'),
-                            Tables\Actions\ViewAction::make()->tooltip('View'),
-                        ])
-            
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\EditAction::make()->tooltip('Edit'),
+                    Tables\Actions\ViewAction::make()->tooltip('View'),
+                    Tables\Actions\DeleteAction::make()->tooltip('Delete'),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -488,10 +496,142 @@ class UserResource extends Resource
             ]);
     }
 
+    public static function infolist(Infolist $infolist): Infolist {
+        return $infolist
+        ->schema([
+            Tabs::make('Tabs 1')
+            ->columnspan(3)
+            ->columnSpanFull()
+            ->tabs([
+                Tabs\Tab::make('Data Santri')
+                ->icon('heroicon-o-user-circle')
+                ->iconPosition(IconPosition::After)
+                ->schema([
+                    TextEntry::make('name')
+                    ->label('Name')
+                    ->icon('heroicon-o-user')
+                    ->badge(),
+                    TextEntry::make('email')
+                    ->label('Email')
+                    ->icon('heroicon-o-envelope')
+                    ->badge(),
+                    TextEntry::make('phone')
+                    ->label('Phone Number')
+                    ->icon('heroicon-o-phone')
+                    ->badge(),
+                    TextEntry::make('date_of_birth')
+                    ->label('Tanggal Lahir')
+                    ->icon('heroicon-o-cake')
+                    ->badge(),
+                    TextEntry::make('gender')
+                    ->label('Jenis Kelamin')
+                    ->icon('heroicon-o-user')
+                    ->badge(),
+                    TextEntry::make('role')
+                    ->icon('heroicon-o-tag')
+                    ->badge(),
+                    TextEntry::make('address')
+                    ->icon('heroicon-o-building-storefront')
+                    ->iconColor('primary'),
+                    // ->badge(),
+                
+                ])
+                            ->columns(3),
+
+                Tabs\Tab::make('Data Masuk Santri')
+                ->icon('heroicon-o-calendar')   
+                ->iconPosition(IconPosition::After)               
+                ->schema([
+                    TextEntry::make('entry_date')
+                    ->label('Tanggal Masuk')
+                    ->icon('heroicon-o-calendar')
+                    ->badge(),
+                    TextEntry::make('entry_date')
+                    ->label('Tanggal Keluar')
+                    ->icon('heroicon-o-calendar')
+                    ->badge(),
+                    TextEntry::make('entry_date')
+                    ->label('Tanggal Lulus')
+                    ->icon('heroicon-o-calendar')
+                    ->badge(),
+
+                    TextEntry::make('kelas_santri.major')
+                    ->label('Jurusan')
+                    ->icon('heroicon-o-swatch')
+                    ->badge(),
+                    
+                    TextEntry::make('generation')
+                    ->label('Angkatan')
+                    ->icon('heroicon-o-academic-cap')
+                    ->badge(),
+                ])
+                ->columns(4),
+
+                Tabs\Tab::make('Data Orang Tua')
+                ->icon('heroicon-o-user-group')
+                ->iconPosition(IconPosition::After)
+                ->schema([
+                    TextEntry::make('family.father_name')
+                    ->label('Nama Ayah')
+                    ->icon('heroicon-o-user')
+                    ->iconColor('primary'),
+                    // ->badge(),
+
+                    TextEntry::make('family.father_phone')
+                    ->label('No. Telp Ayah')
+                    ->icon('heroicon-o-phone')
+                    ->iconColor('primary'),
+                    // ->badge(),
+                    TextEntry::make('family.father_birth')
+                    ->label('Tanggal Lahir Ayah')
+                    ->icon('heroicon-o-cake')
+                    ->iconColor('primary'),
+                    TextEntry::make('family.father_job')
+                    ->label('Pekerjaan Ayah')
+                    ->icon('heroicon-o-briefcase')
+                    ->iconColor('primary'),
+                    // ->badge(),
+
+                    TextEntry::make('family.mother_name')
+                    ->label('Nama Ibu')
+                    ->icon('heroicon-o-user')
+                    ->iconColor('warning'),
+                    // ->badge(),
+
+                    TextEntry::make('family.mother_birth')
+                    ->label('Tanggal Lahir Ibu')
+                    ->icon('heroicon-o-cake')
+                    ->iconColor('warning'),
+                    // ->badge(),
+
+                    TextEntry::make('family.mother_phone')
+                    ->label('No. Telp Ibu')
+                    ->icon('heroicon-o-phone')
+                    ->iconColor('warning'),
+                    // ->badge(),
+                
+                    TextEntry::make('family.mother_job')
+                    ->label('Pekerjaan Ibu')
+                    ->icon('heroicon-o-briefcase')
+                    ->iconColor('warning'),
+                    // ->badge(),
+
+                    TextEntry::make('family.no_kk')
+                    ->label('Nomor KK')
+                    ->icon('heroicon-o-identification')
+                    ->iconColor('violet'),
+                    // ->badge(),                    
+                ])
+                ->columns(3),                
+                ]),
+                ]);
+
+    }
+
     public static function getRelations(): array
     {
         return [
-            //
+            
         ];
     }
 
@@ -501,15 +641,25 @@ class UserResource extends Resource
             'index' => Pages\ListUsers::route('/'),
             'create' => Pages\CreateUser::route('/create'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
+            'view' => Pages\ViewUser::route('/{record}')
         ];
     }
 
-    public static function getLabel(): string {
-        return 'Santris';
+    public static function getLabel(): string
+    {
+        return 'Santri';
     }
 
-    // public static function getNavigationBadges(): ?string {
-    //     $userData = User::all()->count();
-    //     $stringCount = 
-    // }
+    public static function  getNavigationBadge(): ?string
+    {
+
+        $userData = User::all()->count();
+        $stringCount = strval($userData);
+        return $stringCount;
+    }
+
+    public static function getNavigationBadgeTooltip(): ?string
+    {
+        return 'Total Santri';
+    }
 }

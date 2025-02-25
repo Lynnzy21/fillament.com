@@ -16,8 +16,9 @@ class KelasSantriFactory extends Factory
      */
     public function definition(): array
     {
+        $jurusan = ['Marketer','Service','Programer','Video grafher', 'Desaigner', 'Content Creator'];
         return [
-            'major' => fake()->name(),
+            'major' => fake()->randomElement($jurusan),
         ];
     }
 }

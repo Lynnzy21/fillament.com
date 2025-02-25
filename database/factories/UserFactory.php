@@ -41,8 +41,8 @@ class UserFactory extends Factory
             'generation' => fake()->numberBetween(1, 10),
             'entry_date' => $entryDate,
             'graduate_date' => fake()->dateTimeBetween($entryDate, date('Y-m-d', strtotime($entryDate . ' +' . fake()->numberBetween(2, 10) . ' years'))),
-            'status_graduate' => fake()->randomElement(['graduated', 'not_graduated']),
-            'role' => fake()->randomElement(['admin', 'teacher', 'student'])
+            'status_graduate' => fake()->randomElement(['Lulus', 'Belum Lulus', 'Dropout']),
+            'role' => fake()->randomElement(['admin', 'teacher', 'student','leader', 'Ustadz', ])
         
     ];
         
