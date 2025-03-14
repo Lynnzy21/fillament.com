@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('program_stages', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->text('description');
+            $table->string('description');
             $table->date('start_date');
             $table->date('end_date');
             $table->timestamps();

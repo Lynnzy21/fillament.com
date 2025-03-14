@@ -15,7 +15,7 @@ class EditUser extends EditRecord
     {
         return [
             Actions\ViewAction::make()
-                ->label('Info Santri')
+                ->label('View Santri')
                 ->icon('heroicon-o-eye'),
             Actions\DeleteAction::make()
                 ->label('Delete Santri')

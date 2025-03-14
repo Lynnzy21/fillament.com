@@ -32,7 +32,9 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Filament\Forms\Components\Wizard;
 use Filament\Forms\Components\Section;
+use Filament\Infolists\Components\Section as Sections;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Infolists\Components\Fieldset;
 use Filament\Infolists\Components\TextEntry;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -320,6 +322,7 @@ class UserResource extends Resource
                 }),
             TextColumn::make('role')
                 ->badge()
+                ->icon('heroicon-o-check-badge')
                 ->color(function ($record) {
                     $role = $record->role;
                     if ($role == 'admin') {
@@ -393,6 +396,14 @@ class UserResource extends Resource
                 ->searchable()
                 ->label('Status Kelulusan')
                 ->icon('heroicon-o-academic-cap')
+                ->color(function ($record) {
+                    $t4 = $record->status_graduate;
+                    if ($t4 == 'Lulus') {
+                        return 'success';
+                    } else {
+                        return 'warning';
+                    }
+                })
                 ->badge(),
 
             TextColumn::make('created_at')
@@ -500,132 +511,285 @@ class UserResource extends Resource
         return $infolist
         ->schema([
             Tabs::make('Tabs 1')
-            ->columnspan(3)
             ->columnSpanFull()
             ->tabs([
                 Tabs\Tab::make('Data Santri')
                 ->icon('heroicon-o-user-circle')
                 ->iconPosition(IconPosition::After)
                 ->schema([
-                    TextEntry::make('name')
-                    ->label('Name')
-                    ->icon('heroicon-o-user')
-                    ->badge(),
-                    TextEntry::make('email')
-                    ->label('Email')
-                    ->icon('heroicon-o-envelope')
-                    ->badge(),
-                    TextEntry::make('phone')
-                    ->label('Phone Number')
-                    ->icon('heroicon-o-phone')
-                    ->badge(),
-                    TextEntry::make('date_of_birth')
-                    ->label('Tanggal Lahir')
-                    ->icon('heroicon-o-cake')
-                    ->badge(),
-                    TextEntry::make('gender')
-                    ->label('Jenis Kelamin')
-                    ->icon('heroicon-o-user')
-                    ->badge(),
-                    TextEntry::make('role')
-                    ->icon('heroicon-o-tag')
-                    ->badge(),
-                    TextEntry::make('address')
-                    ->icon('heroicon-o-building-storefront')
-                    ->iconColor('primary'),
-                    // ->badge(),
+                    Sections::make('Biodata Santri')
+                    ->icon('heroicon-o-clipboard-document-list')
+                    ->iconColor('warning')
+                    ->iconPosition(IconPosition::After)
+                    ->columnSpan(2)
+                    ->columnSpanFull()
+                    ->schema([
+                            TextEntry::make('name')
+                            // ->color('primary')
+                            ->columnSpan(2)
+                            ->label('NAMA')
+                            ->icon('heroicon-o-user')
+                            ->iconColor('primary'),
+            
+                            TextEntry::make('email')
+                            // ->color('primary')
+                            ->columnSpan(2)
+                            ->label('EMAIL')
+                            ->icon('heroicon-o-envelope')
+                            ->iconColor('primary'),
                 
-                ])
-                            ->columns(3),
+                            TextEntry::make('role')
+                            // ->color('primary')
+                            ->columnSpan(2)
+                            ->label('ROLE')
+                            ->icon('heroicon-o-wrench-screwdriver')
+                            ->iconColor('primary'),
+            
+                            TextEntry::make('gender')
+                            // ->color('primary')
+                            ->columnSpan(2)
+                            ->label('JENIS KELAMIN')
+                            ->icon('heroicon-o-user')
+                            ->iconColor('primary'),
+            
+                            TextEntry::make('phone')
+                            // ->color('primary')
+                            ->columnSpan(2)
+                            ->label('No TELPON')
+                            ->icon('heroicon-o-phone')
+                            ->iconColor('primary'),
+            
+                            TextEntry::make('date_of_birth')
+                            // ->color('primary')
+                            ->columnSpan(2)
+                            ->label('TANGGAL LAHIR')
+                            ->icon('heroicon-o-cake')
+                            ->iconColor('primary'),
+            
+            
+                            TextEntry::make('no_ktp')
+                            // ->color('primary')
+                            ->columnSpan(2)
+                            ->label('No.KTP ')
+                            ->icon('heroicon-o-credit-card')
+                            ->iconColor('primary'),
+            
+                            TextEntry::make('nisn')
+                            // ->color('primary')
+                            ->label('NISN ')
+                            ->icon('heroicon-o-credit-card')
+                            ->iconColor('primary'),
 
-                Tabs\Tab::make('Data Masuk Santri')
-                ->icon('heroicon-o-calendar')   
-                ->iconPosition(IconPosition::After)               
-                ->schema([
-                    TextEntry::make('entry_date')
-                    ->label('Tanggal Masuk')
-                    ->icon('heroicon-o-calendar')
-                    ->badge(),
-                    TextEntry::make('entry_date')
-                    ->label('Tanggal Keluar')
-                    ->icon('heroicon-o-calendar')
-                    ->badge(),
-                    TextEntry::make('entry_date')
-                    ->label('Tanggal Lulus')
-                    ->icon('heroicon-o-calendar')
-                    ->badge(),
+                            TextEntry::make('address')
+                            // ->color('primary')
+                            ->columnSpan(2)
+                            ->label('ALAMAT')
+                            ->icon('heroicon-o-building-storefront')
+                            ->iconColor('primary'),
 
-                    TextEntry::make('kelas_santri.major')
-                    ->label('Jurusan')
-                    ->icon('heroicon-o-swatch')
-                    ->badge(),
+                    ])
+
+                    ->columns(4),
+
+                        Fieldset::make('')
+                        ->columnSpanFull()
+                        ->columnSpan(2)
+                        ->schema([
+                        
+                        ])
+                        
+                    ]),
+
+                            Tabs\Tab::make('Data Orang Tua')
+                            ->icon('heroicon-o-user-group')
+                            ->iconPosition(IconPosition::After)
+                            ->schema([
+                                Sections::make('Biodata Ayah')
+                                ->icon('heroicon-o-user-circle')
+                                ->iconColor('indigo')
+                                ->iconPosition(IconPosition::After)
+                                ->columnSpan(2)
+                                ->columnSpanFull()
+                                ->schema([
+                                    TextEntry::make('family.no_kk')
+                                    ->label('Nomor KK')
+                                    ->columnSpan(3)
+                                    ->icon('heroicon-o-identification')
+                                    ->iconColor('fuchsia')
+                                    ->color('indigo')
+                                    ->badge(),
+
+                                    TextEntry::make('family.father_name')
+                                    ->color('indigo')
+                                    ->columnSpan(2)
+                                    ->label('NAMA AYAH')
+                                    ->icon('heroicon-o-user')
+                                    ->iconColor('primary')
+                                    ->badge(),
+
+                                    TextEntry::make('family.father_phone')
+                                    ->label('No. Telp Ayah')
+                                    ->color('indigo')
+                                    ->columnSpan(2)
+                                    ->icon('heroicon-o-phone')
+                                    ->iconColor('primary')
+                                    ->badge(),
+
+                                    TextEntry::make('family.father_birth')
+                                    ->label('Tanggal Lahir Ayah')
+                                    ->color('indigo')
+                                    ->columnSpan(2)
+                                    ->icon('heroicon-o-cake')
+                                    ->iconColor('primary')
+                                    ->badge(),
+
+                                    TextEntry::make('family.father_job')
+                                    ->label('Pekerjaan Ayah')
+                                    ->color('indigo')
+                                    ->columnSpan(2)
+                                    ->icon('heroicon-o-briefcase')
+                                    ->iconColor('primary')
+                                    ->badge(),
+                                    
+                                        ])
+                                        ->columns(4),
+
+                                        Sections::make('Biodata Ibu')
+                                    ->icon('heroicon-o-user-circle')
+                                    ->iconColor('warning')
+                                    ->iconPosition(IconPosition::After)
+                                    ->columnSpan(2)
+                                    ->columnSpanFull()
+                                        ->schema([
+                                            TextEntry::make('family.mother_name')
+                                            ->label('Nama Ibu')
+                                            ->columnSpan(2)
+                                            ->color('warning')
+                                            ->icon('heroicon-o-user')
+                                            ->iconColor('warning')
+                                            ->badge(),
+                        
+                                            TextEntry::make('family.mother_phone')
+                                            ->label('No. Telp Ibu')
+                                            ->columnSpan(2)
+                                            ->color('warning')
+                                            ->icon('heroicon-o-phone')
+                                            ->iconColor('warning')
+                                            ->badge(),
+
+                                            TextEntry::make('family.mother_birth')
+                                            ->label('Tanggal Lahir Ibu')
+                                            ->columnSpan(2)
+                                            ->color('warning')
+                                            ->icon('heroicon-o-cake')
+                                            ->badge()
+                                            ->iconColor('warning'),
+                        
+                                        
+                                            TextEntry::make('family.mother_job')
+                                            ->label('Pekerjaan Ibu')
+                                            ->columnSpan(2)
+                                            ->icon('heroicon-o-briefcase')
+                                            ->iconColor('warning')
+                                            ->color('warning')
+                                            ->badge(),
+                                            ])
+                                            ->columns(4),         
+                                        ]),
+
+                                Tabs\Tab::make('Data Jabatan')
+                                ->icon('heroicon-o-star')
+                                ->iconPosition(IconPosition::After)
+                                ->schema([
+                                    Sections::make(' Jabatan Santri')
+                                    ->icon('heroicon-o-sparkles')
+                                    ->iconColor('indigo')
+                                    ->iconPosition(IconPosition::After)
+                                    ->columnSpan(2)
+                                    ->columnSpanFull()
+                                    
+                                    ->schema([
+                                        TextEntry::make('departmen.name')
+                                        ->label('Nama Santri')
+                                        ->columnSpan(1)
+                                        ->icon('heroicon-o-user-circle')
+                                        ->iconColor('indigo')
+                                        ->badge(),
+    
+                                        TextEntry::make('departmen.leader.name')
+                                        ->label('Pengajar')
+                                        ->columnSpan(1)
+                                        ->icon('heroicon-o-wrench-screwdriver')
+                                        ->iconColor('orange')
+                                        ->badge(),
+    
+                                        TextEntry::make('departmen.co_leader.name')
+                                        ->label('Asmen')
+                                        ->columnSpan(1)
+                                        ->icon('heroicon-o-swatch')
+                                        ->iconColor('indigo')
+                                        ->badge(),
+                                        ])
+                                        ->columns(4),
+                                    ]),
+
+                                    Tabs\Tab::make('Data Program Santri')
+                                    ->icon('heroicon-o-star')
+                                    ->iconPosition(IconPosition::After)
+                                    ->schema([
+                                        Sections::make(' Kegiatan Santri')
+                                        ->icon('heroicon-o-sparkles')
+                                        ->iconColor('indigo')
+                                        ->iconPosition(IconPosition::After)
+                                        ->columnSpan(2)
+                                        ->columnSpanFull()
+                                        ->schema([
+
+                                            TextEntry::make('program_stage.description')
+                                            ->label('Kegiatan')
+                                            // ->columnSpan(2)
+                                            ->icon('heroicon-o-code-bracket')
+                                            ->iconColor('primary')
+                                            ->badge(),
+
+                                            TextEntry::make('program_stage.start_date')
+                                            ->label('Awal Kegiatan')
+                                            ->icon('heroicon-o-calendar-days')
+                                            ->iconColor('heroicon-o-calandar')
+                                            ->badge(),
+
+                                            TextEntry::make('program_stage.end_date')
+                                            ->label('Tanggal Selesai')
+                                            ->icon('heroicon-o-calendar-days')
+                                            ->iconColor('primary')
+                                            ->badge()
+                                        ])
+                                        ->columns(4)
+                                        ]),
+
+                                        Tabs\Tab::make('Data Kelas Santri')
+                                        ->icon('heroicon-o-building-library')
+                                        ->columnSpan(2)
+                                        ->iconPosition(IconPosition::After)
+                                        ->schema([
+                                            TextEntry::make('Kelas_santri.major')
+                                            ->label('Jurusan')
+                                            ->columnSpan(2)
+                                            ->icon('heroicon-o-rocket-launch')
+                                            ->iconColor('primary')
+                                            ->badge(),
+
+                                            TextEntry::make('kelas_santri.mentor.name')
+                                            ->label('Pengajar')
+                                            ->columnSpan(2)
+                                            ->icon('heroicon-o-user-circle')
+                                            ->iconColor('primary')
+                                            ->badge()
+                                        ])
+                                        ->columns(4)
+                        ])
+                                ]);
                     
-                    TextEntry::make('generation')
-                    ->label('Angkatan')
-                    ->icon('heroicon-o-academic-cap')
-                    ->badge(),
-                ])
-                ->columns(4),
-
-                Tabs\Tab::make('Data Orang Tua')
-                ->icon('heroicon-o-user-group')
-                ->iconPosition(IconPosition::After)
-                ->schema([
-                    TextEntry::make('family.father_name')
-                    ->label('Nama Ayah')
-                    ->icon('heroicon-o-user')
-                    ->iconColor('primary'),
-                    // ->badge(),
-
-                    TextEntry::make('family.father_phone')
-                    ->label('No. Telp Ayah')
-                    ->icon('heroicon-o-phone')
-                    ->iconColor('primary'),
-                    // ->badge(),
-                    TextEntry::make('family.father_birth')
-                    ->label('Tanggal Lahir Ayah')
-                    ->icon('heroicon-o-cake')
-                    ->iconColor('primary'),
-                    TextEntry::make('family.father_job')
-                    ->label('Pekerjaan Ayah')
-                    ->icon('heroicon-o-briefcase')
-                    ->iconColor('primary'),
-                    // ->badge(),
-
-                    TextEntry::make('family.mother_name')
-                    ->label('Nama Ibu')
-                    ->icon('heroicon-o-user')
-                    ->iconColor('warning'),
-                    // ->badge(),
-
-                    TextEntry::make('family.mother_birth')
-                    ->label('Tanggal Lahir Ibu')
-                    ->icon('heroicon-o-cake')
-                    ->iconColor('warning'),
-                    // ->badge(),
-
-                    TextEntry::make('family.mother_phone')
-                    ->label('No. Telp Ibu')
-                    ->icon('heroicon-o-phone')
-                    ->iconColor('warning'),
-                    // ->badge(),
-                
-                    TextEntry::make('family.mother_job')
-                    ->label('Pekerjaan Ibu')
-                    ->icon('heroicon-o-briefcase')
-                    ->iconColor('warning'),
-                    // ->badge(),
-
-                    TextEntry::make('family.no_kk')
-                    ->label('Nomor KK')
-                    ->icon('heroicon-o-identification')
-                    ->iconColor('violet'),
-                    // ->badge(),                    
-                ])
-                ->columns(3),                
-                ]),
-                ]);
-
     }
 
     public static function getRelations(): array
@@ -647,7 +811,7 @@ class UserResource extends Resource
 
     public static function getLabel(): string
     {
-        return 'Santri';
+        return 'Info Santri';
     }
 
     public static function  getNavigationBadge(): ?string

@@ -1,0 +1,246 @@
+Tabs::make('Tabs 1')
+            ->columnSpanFull()
+            ->tabs([
+                Tabs\Tab::make('Data Santri')
+                ->icon('heroicon-o-user-circle')
+                ->iconPosition(IconPosition::After)
+                ->schema([
+                    TextEntry::make('name')
+                    ->label('Name')
+                    ->icon('heroicon-o-user')
+                    ->badge(),
+                    TextEntry::make('email')
+                    ->label('Email')
+                    ->icon('heroicon-o-envelope')
+                    ->badge(),
+                    TextEntry::make('phone')
+                    ->label('Phone Number')
+                    ->icon('heroicon-o-phone')
+                    ->badge(),
+                    TextEntry::make('date_of_birth')
+                    ->label('Tanggal Lahir')
+                    ->icon('heroicon-o-cake')
+                    ->badge(),
+                    TextEntry::make('gender')
+                    ->label('Jenis Kelamin')
+                    ->icon('heroicon-o-user')
+                    ->badge(),
+                    TextEntry::make('role')
+                    ->icon('heroicon-o-tag')
+                    ->badge(),
+                    TextEntry::make('no_ktp')
+                    ->label('No. KTP')
+                    ->icon('heroicon-o-credit-card')
+                    ->badge(),
+                    TextEntry::make('address')
+                    ->icon('heroicon-o-building-storefront')
+                    ->iconColor('primary'),
+                    // ->badge(),
+                
+                ])
+                            ->columns(3),
+
+                Tabs\Tab::make('Keterangan Santri')
+                ->icon('heroicon-o-calendar')   
+                ->iconPosition(IconPosition::After)               
+                ->schema([
+                    TextEntry::make('entry_date')
+                    ->label('Tanggal Masuk')
+                    ->icon('heroicon-o-calendar')
+                    ->badge(),
+                    TextEntry::make('entry_date')
+                    ->label('Tanggal Keluar')
+                    ->icon('heroicon-o-calendar')
+                    ->badge(),
+
+                    TextEntry::make('entry_date')
+                    ->label('Tanggal Lulus')
+                    ->icon('heroicon-o-calendar')
+                    ->badge(),
+
+                    TextEntry::make('kelas_santri.major')
+                    ->label('Jurusan')
+                    ->icon('heroicon-o-swatch')
+                    ->badge(),
+                    
+                    TextEntry::make('generation')
+                    ->label('Angkatan')
+                    ->icon('heroicon-o-academic-cap')
+                    ->badge(),
+
+                    TextEntry::make('status_graduate')
+                    ->label('Status Kelulusan')
+                    ->icon('heroicon-o-academic-cap')
+                    ->badge(),
+                ])
+                ->columns(3),
+
+                Tabs\Tab::make('Data Orang Tua')
+                ->icon('heroicon-o-user-group')
+                ->iconPosition(IconPosition::After)
+                ->schema([
+                    TextEntry::make('family.father_name')
+                    ->label('Nama Ayah')
+                    ->icon('heroicon-o-user')
+                    ->iconColor('primary'),
+                    // ->badge(),
+
+                    TextEntry::make('family.father_phone')
+                    ->label('No. Telp Ayah')
+                    ->icon('heroicon-o-phone')
+                    ->iconColor('primary'),
+                    // ->badge(),
+                    TextEntry::make('family.father_birth')
+                    ->label('Tanggal Lahir Ayah')
+                    ->icon('heroicon-o-cake')
+                    ->iconColor('primary'),
+                    TextEntry::make('family.father_job')
+                    ->label('Pekerjaan Ayah')
+                    ->icon('heroicon-o-briefcase')
+                    ->iconColor('primary'),
+                    // ->badge(),
+
+                    TextEntry::make('family.mother_name')
+                    ->label('Nama Ibu')
+                    ->icon('heroicon-o-user')
+                    ->iconColor('warning'),
+                    // ->badge(),
+
+                    TextEntry::make('family.mother_birth')
+                    ->label('Tanggal Lahir Ibu')
+                    ->icon('heroicon-o-cake')
+                    ->iconColor('warning'),
+                    // ->badge(),
+
+                    TextEntry::make('family.mother_phone')
+                    ->label('No. Telp Ibu')
+                    ->icon('heroicon-o-phone')
+                    ->iconColor('warning'),
+                    // ->badge(),
+                
+                    TextEntry::make('family.mother_job')
+                    ->label('Pekerjaan Ibu')
+                    ->icon('heroicon-o-briefcase')
+                    ->iconColor('warning'),
+                    // ->badge(),
+
+                    TextEntry::make('family.no_kk')
+                    ->label('Nomor KK')
+                    ->icon('heroicon-o-identification')
+                    ->iconColor('violet'),
+                    // ->badge(),
+                ])
+                ->columns(2),
+                
+                Tabs\Tab::make('Data Perizinan')
+                ->icon('heroicon-o-table-cells')
+                ->iconPosition(IconPosition::After)
+                ->schema([
+                    TextEntry::make('list_izin.status')
+                    ->label('Perizinan')
+                    ->icon('')
+                    ->iconColor(''),
+                ])
+            ])
+
+
+            Fieldset::make('KETERANGAN SANTRI')
+            ->columnSpanFull()
+            ->columnSpan(3)
+                ->schema([
+                    TextEntry::make('entry_date')
+                    ->label('Tanggal Masuk')
+                    ->icon('heroicon-o-calendar')
+                    ->badge(),
+                    TextEntry::make('entry_date')
+                    ->label('Tanggal Keluar')
+                    ->icon('heroicon-o-calendar')
+                    ->badge(),
+
+                    TextEntry::make('entry_date')
+                    ->label('Tanggal Lulus')
+                    ->icon('heroicon-o-calendar')
+                    ->badge(),
+
+                    TextEntry::make('kelas_santri.major')
+                    ->label('Jurusan')
+                    ->icon('heroicon-o-swatch')
+                    ->badge(),
+                    
+                    TextEntry::make('generation')
+                    ->label('Angkatan')
+                    ->icon('heroicon-o-academic-cap')
+                    ->badge(),
+
+                    TextEntry::make('status_graduate')
+                    ->label('Status Kelulusan')
+                    ->icon('heroicon-o-academic-cap')
+                    ->badge(),
+                    
+                ]),   
+
+
+
+                    Fieldset::make('DATA SANTRI')
+            ->columnSpanFull()
+            ->columnSpan(2)
+            ->schema([
+                TextEntry::make('name')
+                ->color('warning')
+                ->label('NAMA')
+                ->icon('heroicon-o-user')
+                ->iconColor('primary'),
+
+                TextEntry::make('email')
+                ->color('warning')
+                ->label('EMAIL')
+                ->icon('heroicon-o-envelope')
+                ->iconColor('primary'),
+    
+                TextEntry::make('role')
+                ->color('warning')
+                ->label('ROLE')
+                ->icon('heroicon-o-wrench-screwdriver')
+                ->iconColor('primary'),
+
+                TextEntry::make('gender')
+                ->color('warning')
+                ->label('JENIS KELAMIN')
+                ->icon('heroicon-o-user')
+                ->iconColor('primary'),
+
+                TextEntry::make('phone')
+                ->color('warning')
+                ->label('No TELPON')
+                ->icon('heroicon-o-phone')
+                ->iconColor('primary'),
+
+                TextEntry::make('date_of_birth')
+                ->color('warning')
+                ->label('TANGGAL LAHIR')
+                ->icon('heroicon-o-cake')
+                ->iconColor('primary'),
+
+
+                TextEntry::make('no_ktp')
+                ->color('warning')
+                ->label('No.KTP ')
+                ->icon('heroicon-o-credit-card')
+                ->iconColor('primary'),
+
+                TextEntry::make('nisn')
+                ->color('warning')
+                ->label('NISN ')
+                ->icon('heroicon-o-credit-card')
+                ->iconColor('primary'),
+
+                TextEntry::make('address')
+                ->color('warning')
+                ->columnSpan(3)
+                ->label('ALAMAT')
+                ->icon('heroicon-o-building-storefront')
+                ->iconColor('primary'),
+
+            
+            ])
+            ->columns(3),             

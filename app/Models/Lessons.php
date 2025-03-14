@@ -12,7 +12,7 @@ class Lessons extends Model
 
     protected $fillable = [
         'name',
-        'kelas_id',
+        'kelas_santri_id',
         'description'
     ];
 

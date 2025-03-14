@@ -18,7 +18,7 @@ class ProgramStageFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'description' => fake()->paragraph(),
+            'description' => fake()->randomElement(['Kerja Bakti', 'Main Futsal','Main Basket', 'Partyan', 'COC', 'Olimpiade', 'Ossis']),
             'start_date' => fake()->date('Y-m-d'),
             'end_date' => fake()->date('Y-m-d')
         ];
